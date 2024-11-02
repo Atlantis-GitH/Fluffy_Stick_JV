@@ -12,7 +12,7 @@
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tipso/1.0.8/tipso.min.js
 // @grant        GM_addStyle
-// @version      0.4.3.v305
+// @version      0.4.3.v310
 // @icon         https://image.jeuxvideo.com/stickers/p/1jnh
 // @license      MIT
 // ==/UserScript==
@@ -24,9 +24,36 @@ Code de base par ImThatGuy (2018-2020)
 */
 
 
+// APPENDS
+let toolbar = document.querySelector(".jv-editor-toolbar")
+let imgBtnGroup = toolbar.querySelectorAll(".btn-group")[2]
+//btns = imgBtnGroup.querySelectorAll("button")
+let stickersBtn = document.createElement("button")
+stickersBtn.classList.add("btn")
+stickersBtn.classList.add("btn-jv-editor-toolbar")
+stickersBtn.setAttribute("id", "old-stickjvc")
+if (window.location.href.indexOf("jeuxvideo.com/messages-prives/") > -1) {
+    //MP
+} else {
+    stickersBtn.setAttribute("title", "Stickers intégrés")
+}
+stickersBtn.setAttribute("type", "button")
+stickersBtn.innerHTML = "s"
+if (window.location.href.indexOf("jeuxvideo.com/messages-prives/") > -1) {
+    stickersBtn.style.textDecoration = "line-through";
+    stickersBtn.style.textDecorationThickness = "2px";
+} else {
+    //Forum
+}
+stickersBtn.style.lineHeight = "0"
+stickersBtn.addEventListener("click", onStickersButtonClick);
+imgBtnGroup.appendChild(stickersBtn)
+
 /*jshint multistr: true */
-(function() {
+function onStickersButtonClick() {
     'use strict';
+
+    stickersBtn.removeEventListener("click", onStickersButtonClick);
 
     // IMPORT CSS
     $('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/tipso/1.0.8/tipso.min.css"/>');
@@ -228,29 +255,6 @@ Code de base par ImThatGuy (2018-2020)
         }
     });
 
-    // APPENDS
-    let toolbar = document.querySelector(".jv-editor-toolbar")
-    let imgBtnGroup = toolbar.querySelectorAll(".btn-group")[2]
-    //btns = imgBtnGroup.querySelectorAll("button")
-    let stickersBtn = document.createElement("button")
-    stickersBtn.classList.add("btn")
-    stickersBtn.classList.add("btn-jv-editor-toolbar")
-    stickersBtn.setAttribute("id", "old-stickjvc")
-    if (window.location.href.indexOf("jeuxvideo.com/messages-prives/") > -1) {
-        //MP
-    } else {
-        stickersBtn.setAttribute("title", "Stickers intégrés")
-    }
-    stickersBtn.setAttribute("type", "button")
-    stickersBtn.innerHTML = "s"
-    if (window.location.href.indexOf("jeuxvideo.com/messages-prives/") > -1) {
-        stickersBtn.style.textDecoration = "line-through";
-        stickersBtn.style.textDecorationThickness = "2px";
-    } else {
-        //Forum
-    }
-    stickersBtn.style.lineHeight = "0"
-    imgBtnGroup.appendChild(stickersBtn)
 
 
     $(".new-stickers").append('<div code="hap" id="hap-css" title="Hap" class="cat-stickers"></div>\
@@ -380,6 +384,9 @@ Code de base par ImThatGuy (2018-2020)
 
     // Active script
     $(".new-stickers#"+currentDiv).hide(0);
+    $(".new-stickers#"+currentDiv).show(80);
+    $(".new-stickers").css("overflow", "auto");
+	$("#old-stickjvc").addClass("active");
     $("#old-stickjvc").click(function() {
         if ( $(".new-stickers").is(":visible") ) {
             $(this).removeClass("active");
@@ -452,4 +459,4 @@ Code de base par ImThatGuy (2018-2020)
     });
     */
 
-})();
+}
